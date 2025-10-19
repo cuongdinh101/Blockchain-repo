@@ -1,0 +1,52 @@
+Thành viên:
+Đinh Phùng Chí Cường – 24102900
+Đào Bá Tuấn Ngọc – 24100498
+
+BÁO CÁO TỔNG QUÁT: SMART CONTRACT QUẢN LÝ VẬN TẢI ĐƯỜNG BỘ TRÊN STELLAR/SOROBAN
+
+BÁO CÁO TỔNG QUÁT: SMART CONTRACT QUẢN LÝ VẬN TẢI ĐƯỜNG BỘ TRÊN STELLAR/SOROBAN
+
+1. BỐI CẢNH & VẤN ĐỀ
+Thực trạng: Hợp đồng điện tử (PDF, ký số) vẫn còn nhiều hạn chế như khó minh bạch chi phí, dễ gian lận, tự động hóa thấp.
+Mục tiêu: Xây dựng Smart Contract trên Stellar Soroban để tự động hóa điều khoản hợp đồng, ghi nhận dữ liệu vận hành minh bạch, và thanh toán tự động khi điều kiện đạt.
+
+2. MÔ HÌNH KHÁI NIỆM (Conceptual Model)
+Thực thể: Shipper (Chủ hàng), Carrier (Nhà vận tải), Oracle (IoT), Smart Contract, Token.
+Chu trình: Draft → Active → InTransit → Delivered → Settled.
+Dữ liệu lưu trữ trong instance storage của Soroban, minh bạch, TTL rõ ràng.
+
+3. THIẾT KẾ KỸ THUẬT
+Struct FreightContract chứa thông tin hợp đồng, trạng thái, chi phí, hash chứng từ.
+Các hàm public:
+- create_contract: tạo hợp đồng
+- accept: xác nhận hợp đồng
+- mark_funded: đánh dấu ký quỹ
+- start_trip: bắt đầu hành trình
+- log_telemetry: ghi dữ liệu vận hành
+- submit_pod: nộp chứng từ giao hàng
+- evaluate_and_settle: tính toán và thanh toán
+- get_contract: xem trạng thái
+
+4. QUY TRÌNH BUILD, DEPLOY, INVOKE
+- Build: cargo build --target wasm32v1-none --release
+- Deploy: stellar contract deploy --wasm target/wasm32v1-none/release/road_freight.wasm --network testnet --source dev-id
+- Invoke: thực hiện tuần tự create_contract → accept → mark_funded → start_trip → log_telemetry → submit_pod → evaluate_and_settle → get_contract.
+
+5. CHỈ SỐ ĐÁNH GIÁ
+- Minh bạch chi phí ≥ 95%
+- Giảm tranh chấp ≥ 50%
+- Tự động hóa > 90%
+- Giảm thời gian thanh toán từ ngày xuống phút
+
+6. HẠN CHẾ & HƯỚNG PHÁT TRIỂN
+- Chưa tích hợp token thật (mới demo ký quỹ).
+- Oracle cần tin cậy, có ký số.
+- Cần mở rộng mô hình phí linh hoạt và dashboard giám sát.
+
+7. RỦI RO & TUÂN THỦ
+- Pháp lý: cần phối hợp với ký số.
+- Bảo mật: quản lý khóa riêng, phòng ngừa mất mát.
+
+8. KẾT LUẬN
+Smart Contract trên Soroban giúp giảm gian lận, tăng minh bạch, rút ngắn thanh toán, và tạo nền tảng cho logistics minh bạch tại Việt Nam.
+
